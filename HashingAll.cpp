@@ -163,15 +163,61 @@ class HashingOnline
 	}
 	void pair_with_given_sum(int a[],int n,int req_sum)
 	{
+		// If we first insert all elements and then check if the sum exists then there are 2 problems : 
+		// 1. We are traversing the array twice
+		// 2. If the required sum is twice of any element present in the set, we will get output as true
+		// Because effective search = sr(2*a[i]-a[i]) = sr(a[i]); a[i] has been inserted already
 		unordered_set<int> s;
 		for(int i=0;i<n;i++)
 		{	
-			if(s.find((req_sum-a[i]))!=s.end())
+			if(s.count((req_sum-a[i])))
 			{
 				cout<<"Yes\n";
 				return;
 			}
 			s.insert(a[i]);
+		}
+		cout<<"No\n";
+	}
+	void subarray_with_zero_sum(int a[], int n)
+	{
+		int pref_sum=0;
+		unordered_set<int> s;
+		for(int i=0;i<n;i++)
+		{
+			// if(a[i]==0)
+			// {
+			// 	cout<<"Yes\n";
+			// 	return;
+			// }
+			pref_sum+=a[i];
+			if(pref_sum==0 || s.count(pref_sum)==1)
+			{
+				cout<<"Yes\n";
+				return;
+			}
+			s.insert(pref_sum);
+		}
+		cout<<"No\n";
+	}
+	void subarray_with_given_sum(int a[], int n,int req_sum)
+	{
+		int pref_sum=0;
+		unordered_set<int> s;
+		for(int i=0;i<n;i++)
+		{
+			// if(a[i]==0)
+			// {
+			// 	cout<<"Yes\n";
+			// 	return;
+			// }
+			pref_sum+=a[i];
+			if(pref_sum==req_sum || s.count(pref_sum-req_sum)==1)
+			{
+				cout<<"Yes\n";
+				return;
+			}
+			s.insert(pref_sum);
 		}
 		cout<<"No\n";
 	}
@@ -205,8 +251,12 @@ int main()
 	int a1[10]={15,12,13,13,14,18,12,15,19,18};
 	int a2[5]={10,12,12,13,14};
 	int a3[5]={3,2,8,15,-8};
+	int a4[7]={11,12,5,-1,-1,10,5};
+	int a5[7]={15,2,8,10,-5,-8,6};
 	// obj.count_distinct(a1,10);
 	// obj.frequency_of_element(a1,10);
 	// obj.intersection_of_two_arrays(a1,10,a2,5);
-	obj.pair_with_given_sum(a3,5,107);
+	// obj.pair_with_given_sum(a3,5,107);
+	// obj.subarray_with_zero_sum(a4,7);
+	obj.subarray_with_given_sum(a5,7,3);
 }
