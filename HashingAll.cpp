@@ -221,6 +221,116 @@ class HashingOnline
 		}
 		cout<<"No\n";
 	}
+	void longest_subarray_with_given_sum(int a[], int n,int req_sum)
+	{
+		unordered_map<int,int> m;
+		int longest_array_length=-1;
+		int pref_sum=0;
+		for(int i=0;i<n;i++)
+		{
+			pref_sum+=a[i];
+			if(pref_sum==req_sum)
+				longest_array_length=i+1>longest_array_length?i+1:longest_array_length ;
+			else if(m.find(pref_sum-req_sum)!=m.end())
+			{
+				int x=(i-m[pref_sum-req_sum]);
+				longest_array_length = (x>longest_array_length)?x:longest_array_length;
+			}
+			else
+				m[pref_sum]=i;
+			// cout<<"i = "<<i<<"\tlongest_array_length = "<<longest_array_length<<endl;
+		}
+		cout<<longest_array_length<<endl;
+	}
+	void longest_subarray_with_equal_0_1(int a[], int n)
+	{
+		unordered_map<int,int> m;
+		int longest_array_length=-1;
+		int pref_sum=0;
+		for(int i=0;i<n;i++)
+		{
+			pref_sum+= a[i]?1:-1;
+			if(pref_sum==0)
+				longest_array_length=i+1;
+			else if(m.find(pref_sum)!=m.end())
+			{
+				int x=(i-m[pref_sum]);
+				longest_array_length = max(x,longest_array_length);
+			}
+			else
+				m[pref_sum]=i;
+		}
+		cout<<longest_array_length<<endl;
+	}
+	// subarrays in both arrays start from same index and end at same index
+	// assumtion : both arrays have same size
+	void longest_subarrays_with_same_sums(int a[], int b[],int n)
+	{
+		unordered_map<int,int> m;
+		int longest_array_length=-1;
+		int pref_sum=0;
+		for(int i=0;i<n;i++)
+		{
+			pref_sum+= a[i]-b[i];
+			if(pref_sum==0)
+				longest_array_length=i+1;
+			else if(m.find(pref_sum)!=m.end())
+			{
+				int x=(i-m[pref_sum]);
+				longest_array_length = max(x,longest_array_length);
+			}
+			else
+				m[pref_sum]=i;
+		}
+		cout<<longest_array_length<<endl;
+	}
+	// may look like n^2 but it ain't
+	void longest_consecutive_subsequence(int a[],int n)
+	{
+		unordered_set<int> s(a,a+n);
+		int cnt=0,res=0;
+		for(int i=0;i<n;i++)
+		{
+			if(s.count(a[i]-1)==0)
+			{
+				cnt=1;
+				while(s.count(a[i]+cnt))
+					cnt++;
+				res=max(res,cnt);
+			}
+		}
+		cout<<res<<endl;
+	}
+	void count_distinct_elements_in_window(int a[],int n,int k)
+	{
+		unordered_map<int,int> m;
+		for(int i=0;i<k;i++)
+		{
+			m[a[i]]++;
+		}
+		cout<<m.size()<<"\t";
+		for(int i=k;i<n;i++)
+		{
+			m[a[i-k]]--;
+			if(m[a[i-k]]==0)
+				m.erase(a[i-k]);
+			m[a[i]]++;
+			cout<<m.size()<<"\t";
+		}
+	}
+	void print_elements_more_than_n_by_k(int a[],int n,int k)
+	{
+		unordered_map<int , int> m;
+		for(int i=0;i,n;i++)
+		{
+			m[a[i]]++;
+		}
+		for(auto it:m)
+		{
+			if(it.second>(n/k))
+				cout<<it.first<<"\t";
+		}
+	}
 };
 int main()
 {
@@ -253,10 +363,20 @@ int main()
 	int a3[5]={3,2,8,15,-8};
 	int a4[7]={11,12,5,-1,-1,10,5};
 	int a5[7]={15,2,8,10,-5,-8,6};
+	int a6[9]={8,3,1,5,-6,6,2,2};
+	int a7[15]={0,1,0,0,0,0};
+	int a8[15]={1,0,1,0,0,1};
+	int a9[5]={9,10,11,7,8};
+	int a10[6]={10,20,10,10,30,40};
 	// obj.count_distinct(a1,10);
 	// obj.frequency_of_element(a1,10);
 	// obj.intersection_of_two_arrays(a1,10,a2,5);
 	// obj.pair_with_given_sum(a3,5,107);
 	// obj.subarray_with_zero_sum(a4,7);
-	obj.subarray_with_given_sum(a5,7,3);
+	// obj.subarray_with_given_sum(a5,7,3);
+	// obj.longest_subarray_with_given_sum(a6,8,4);
+	// obj.longest_subarray_with_equal_0_1(a7,8);
+	// obj.longest_subarrays_with_same_sums(a7,a8,6);
+	// obj.longest_consecutive_subsequence(a9,5);
+	obj.count_distinct_elements_in_window(a10,6,4);
 }
