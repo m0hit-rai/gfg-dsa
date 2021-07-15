@@ -331,6 +331,34 @@ class HashingOnline
 				cout<<it.first<<"\t";
 		}
 	}
+	void print_elements_more_than_n_by_k_modified_moore_algo(int a[],int n, int k)
+	{
+		unordered_map<int, int> m;
+		for(int i=0;i<n;i++)
+		{
+			m[a[i]]++;
+			if(m.size()>k-1)
+			{
+				for(auto it : m)
+				{
+					it.second--;
+					if(it.second==0)
+						m.erase(it.first);
+				}
+			}
+		}
+		for(auto it : m)
+		{
+			int count=0;
+			for(int i=0;i<n;i++)
+			{
+				if(a[i]==it.first)
+					count++;
+			}
+			if(count>(n/k))
+				cout<<it.first<<"\t";
+		}
+	}
 };
 int main()
 {
@@ -378,5 +406,5 @@ int main()
 	// obj.longest_subarray_with_equal_0_1(a7,8);
 	// obj.longest_subarrays_with_same_sums(a7,a8,6);
 	// obj.longest_consecutive_subsequence(a9,5);
-	obj.count_distinct_elements_in_window(a10,6,4);
+	// obj.count_distinct_elements_in_window(a10,6,4);
 }
