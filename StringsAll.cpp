@@ -138,7 +138,7 @@ class StringQuestions
 		else
 			cout<<"Leftmost non-repeating element : "<<s[res]<<endl;
 	}
-	string rev_string(string s, int st, int end)
+	void rev_string(string &s, int st, int end)
 	{
 		while(st<end)
 		{
@@ -148,23 +148,45 @@ class StringQuestions
 			st++;
 			end--;
 		}
-		return s;
+		// return s;
 	}
 	void reverse_words_string(string s)
 	{
 		cout<<"Old string : "<<s<<endl;
-		s=rev_string(s,0,s.length()-1);
+		rev_string(s,0,s.length()-1);
 		int last_white_space=-1;
 		for(int i=0;i<s.length();i++)
 		{
 			if(s[i]==' ')
 			{
-				s=rev_string(s,last_white_space+1,i-1);
+				// s=rev_string(s,last_white_space+1,i-1);
+				rev_string(s,last_white_space+1,i-1);
 				last_white_space=i;
 			}
 		}
-		s=rev_string(s,last_white_space+1,s.length()-1);
+		// s=rev_string(s,last_white_space+1,s.length()-1);
+		rev_string(s,last_white_space+1,s.length()-1);
 		cout<<"New string : "<<s<<endl;
+	}
+	// ------- PATTERN SEARCHING ALGORITHMS------ //
+	void improver_naive_patt_search(string text, string patt)
+	{
+		int n=text.length(),m=patt.length();
+		for(int i=0;i<n;)
+		{
+			int j;
+			for(j=0;j<m;j++)
+			{
+				if(patt[j]!=text[i+j])
+				break;
+			}
+			if(j==m)
+			cout<<i<<"\t";
+			if(j==0)
+			i++;
+			else
+			i=i+j;
+		}
 	}
 };
 int main()
@@ -178,6 +200,7 @@ int main()
 	// obj.leftmost_repeating_element("MohIt_Kumar_Rai");
 	// obj.leftmost_non_repeating_element("geeksforgeeks");
 	// obj.reverse_words_string("red blue green yellow");
-	obj.reverse_words_string("nospacestring");
+	// obj.reverse_words_string("nospacestring");
+	obj.improver_naive_patt_search("abcefabcdghababecdekabcd","abcd");
 
 }
