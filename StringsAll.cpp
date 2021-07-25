@@ -21,7 +21,7 @@ class StringQuestions
 		}
 		cout<<"YES";
 	}
-	void check_if_str_is_a_susequence(string s1,string s2)
+	void check_if_str_is_a_sbusequence(string s1,string s2)
 	{
 		// len s2 < len s1
 		int i=0,j=0;
@@ -42,7 +42,7 @@ class StringQuestions
 		else
 			cout<<"NO\n";
 	}
-	void rec_check_if_str_is_a_susequence(string s1,string s2)
+	void rec_check_if_str_is_a_sbusequence(string s1,string s2)
 	{
 		// len s2 < len s1
 		if(s2.empty())
@@ -57,9 +57,9 @@ class StringQuestions
 		else
 		{
 			if(s1[0]==s2[0])
-				rec_check_if_str_is_a_susequence(s1.substr(1),s2.substr(1));
+				rec_check_if_str_is_a_sbusequence(s1.substr(1),s2.substr(1));
 			else
-				rec_check_if_str_is_a_susequence(s1.substr(1),s2);
+				rec_check_if_str_is_a_sbusequence(s1.substr(1),s2);
 		}
 	}
 	void check_for_anagram(string s1,string s2)
@@ -99,13 +99,85 @@ class StringQuestions
 		else
 			cout<<"NO\n";
 	}
+	void leftmost_repeating_element(string s)
+	{
+		unordered_set<char> visited;
+		int res=-1;
+		for(int i=s.length()-1;i>=0;i--)
+		{
+			if(visited.count(s[i]))
+				res=i;
+			visited.insert(s[i]);
+		}
+		if(res==-1)
+			cout<<"No repeating element\n";
+		else
+			cout<<"Leftmost repeating element : "<<s[res]<<endl;
+	}
+	void leftmost_non_repeating_element(string s)
+	{
+		unordered_set<char> visited;
+		int res=-1;
+		for(int i=s.length()-1;i>=0;i--)
+		{
+			if(visited.count(s[i])==0)
+			{
+				// if the char hasn't been visited, it could be a possible answer
+				res=i;
+			}
+			else if(s[res]==s[i])
+			{
+				// if the char has been visited, but was set as a potential answer,
+				// then this char is definitely not the answer as it is being visited again.
+				res=-1;
+			}
+			visited.insert(s[i]);
+		}
+		if(res==-1)
+			cout<<"No non-repeating element\n";
+		else
+			cout<<"Leftmost non-repeating element : "<<s[res]<<endl;
+	}
+	string rev_string(string s, int st, int end)
+	{
+		while(st<end)
+		{
+			char temp=s[st];
+			s[st]=s[end];
+			s[end]=temp;
+			st++;
+			end--;
+		}
+		return s;
+	}
+	void reverse_words_string(string s)
+	{
+		cout<<"Old string : "<<s<<endl;
+		s=rev_string(s,0,s.length()-1);
+		int last_white_space=-1;
+		for(int i=0;i<s.length();i++)
+		{
+			if(s[i]==' ')
+			{
+				s=rev_string(s,last_white_space+1,i-1);
+				last_white_space=i;
+			}
+		}
+		s=rev_string(s,last_white_space+1,s.length()-1);
+		cout<<"New string : "<<s<<endl;
+	}
 };
 int main()
 {
 	StringQuestions obj;
 	// obj.check_pallindrome("aaaaba");
-	// obj.rec_check_if_str_is_a_susequence("abcde","adb");
+	// obj.rec_check_if_str_is_a_susb equence("abcde","adb");
 	// string s= "abcde";
 	// cout<<s.substr(1);
-	obj.check_for_anagram("aab","bab");
+	// obj.check_for_anagram("aab","bab");
+	// obj.leftmost_repeating_element("MohIt_Kumar_Rai");
+	// obj.leftmost_non_repeating_element("geeksforgeeks");
+	// obj.reverse_words_string("red blue green yellow");
+	obj.reverse_words_string("nospacestring");
+
 }
