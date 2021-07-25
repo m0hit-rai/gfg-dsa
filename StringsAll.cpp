@@ -188,6 +188,30 @@ class StringQuestions
 			i=i+j;
 		}
 	}
+	// KMP algo start
+	void fill_LPS_array(string &s, int lps[])
+	{
+		lps[0]=0;
+		int i=1,len=0,n=s.length();
+		while(i<n)
+		{
+			if(s[i]==s[len])
+			{
+				lps[i++]=len++;
+			}
+			else
+			{
+				if(len==0)
+				{	
+					lps[i++]=len;
+				}
+				else
+				{
+					len=lps[len-1];
+				}
+			}
+		}
+	}
 };
 int main()
 {
@@ -201,6 +225,10 @@ int main()
 	// obj.leftmost_non_repeating_element("geeksforgeeks");
 	// obj.reverse_words_string("red blue green yellow");
 	// obj.reverse_words_string("nospacestring");
-	obj.improver_naive_patt_search("abcefabcdghababecdekabcd","abcd");
-
+	// obj.improver_naive_patt_search("abcefabcdghababecdekabcd","abcd");
+	string s1="abcefabcdghababecdekabcd";
+	int lps[s1.length()]{0};
+	obj.fill_LPS_array(s1,lps);
+	for(int i=0;i<s1.length();i++)
+		cout<<lps[i]<<"\t";
 }
