@@ -168,6 +168,46 @@ class StringQuestions
 		rev_string(s,last_white_space+1,s.length()-1);
 		cout<<"New string : "<<s<<endl;
 	}
+	void check_for_rotation(string s1, string s2)
+	{
+		
+		// int rotation=-1;
+		// int i=0,j=0,n=s1.length(),m=s2.length();
+		// while(i<n && j<m)
+		// {
+		// 	if(s1[i]==s2[j])
+		// 	{
+		// 		if(rotation==-1)
+		// 			rotation=j;
+		// 		i++;
+		// 		j++;
+		// 	}
+		// 	else
+		// 	{
+		// 		j++;
+		// 		rotation=-1;
+		// 	}
+		// }
+		// if(rotation==0)
+		// {
+		// 	cout<<"YES\n";
+		// 	return;
+		// }
+		// for(i=s2.length()-rotation,j=0;j<rotation;i++,j++)
+		// {
+		// 	if(s1[i]!=s2[j])
+		// 	{
+		// 		cout<<"No\n";
+		// 		return;
+		// 	}
+		// }
+		// cout<<"YES\n";
+		// CORRECT BUT THERE IS A BETTER WAY
+		if((s1+s1).find(s2)!=string::npos)
+			cout<<"YES\n";
+		else
+			cout<<"NO\n";
+	}
 	// ------- PATTERN SEARCHING ALGORITHMS------ //
 	void improver_naive_patt_search(string text, string patt)
 	{
@@ -212,6 +252,34 @@ class StringQuestions
 			}
 		}
 	}
+	void KMP(string pat, string txt)
+	{
+		int n=txt.length();
+		int m=pat.length();
+		int lps[m];
+		fill_LPS_array(pat,lps);
+		int i=0,j=0;
+		while(i<n)
+		{
+			if(pat[j]==txt[i])
+			{
+				i++;
+				j++;
+			}
+			if(j==m)
+			{
+				cout<<(i-j);
+				j=lps[j-1];
+			}
+			else if(i<n && pat[i]!= txt[i])
+			{
+				if(i==0)
+					i++;
+				else
+					j=lps[j-1];
+			}
+		}
+	}
 };
 int main()
 {
@@ -226,9 +294,10 @@ int main()
 	// obj.reverse_words_string("red blue green yellow");
 	// obj.reverse_words_string("nospacestring");
 	// obj.improver_naive_patt_search("abcefabcdghababecdekabcd","abcd");
-	string s1="abcefabcdghababecdekabcd";
-	int lps[s1.length()]{0};
-	obj.fill_LPS_array(s1,lps);
-	for(int i=0;i<s1.length();i++)
-		cout<<lps[i]<<"\t";
+	// string s1="abcefabcdghababecdekabcd";
+	// int lps[s1.length()]{0};
+	// obj.fill_LPS_array(s1,lps);
+	// for(int i=0;i<s1.length();i++)
+	// 	cout<<lps[i]<<"\t";
+	obj.check_for_rotation("bcaacd","acdbca");
 }

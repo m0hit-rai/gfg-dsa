@@ -546,12 +546,12 @@ int main()
 	// obj.sort_three_type_arr(a6,11,63,27);
 	// obj.printArr(a6,11);
 	// obj.minimum_diff(a6,11);
-	// obj.counting_sort(a7,15,10);
-	// obj.printArr(a7,15);
-	char ch='z';
-	cout<<"ch = "<<ch<<endl;
-	ch++;
-	cout<<"ch = "<<ch<<endl;
-	string x="mohitkumarraianandlokcolonyfaizabadroadchinhatlucknow";
-	cout<<"ch = "<<x.length()<<endl;
+	obj.counting_sort(a7,15,10);
+	obj.printArr(a7,15);
+	// char ch='z';
+	// cout<<"ch = "<<ch<<endl;
+	// ch++;
+	// cout<<"ch = "<<ch<<endl;
+	// string x="mohitkumarraianandlokcolonyfaizabadroadchinhatlucknow";
+	// cout<<"ch = "<<x.length()<<endl;
 }
