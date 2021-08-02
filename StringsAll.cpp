@@ -208,6 +208,23 @@ class StringQuestions
 		else
 			cout<<"NO\n";
 	}
+	void longest_distinct_substring(string s)
+	{
+		int n=s.length(),res=0;
+		vector<char>prev(256,-1);
+		// stores the previous index of the element
+		int i=0;
+		for(int j=0;j<n;j++)
+		{
+			i=max(i,prev[s[j]]+1);
+			// if the element has not occured prev will be zero, if it has occured it will give one more than the index
+			int max_end=j-i-1;
+			// the LDS starts from i and ends at j
+			res=max(res,max_end);
+			prev[s[j]]=j;
+			// setting the prev of the char for future use
+		}
+	}
 	// ------- PATTERN SEARCHING ALGORITHMS------ //
 	void improver_naive_patt_search(string text, string patt)
 	{
