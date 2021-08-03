@@ -228,6 +228,31 @@ class StringQuestions
 			// setting the prev of the char for future use
 		}
 	}
+	vector<string> winner(string a[],int n)
+	{
+		unordered_map<string,int> m;
+		int max_vote=0;
+		for(int i=0;i<n;i++)
+		{
+			m[a[i]]++;
+			if(m[a[i]]>max_vote)
+				max_vote=m[a[i]];
+		}
+		vector<string> ans;
+		for(auto it : m)
+		{
+			if(it.second==max_vote)
+			{
+				if(ans.size() && it.first<ans[0])
+				{
+					ans.pop_back();
+					ans.push_back(it.first);
+				}
+			}
+		}
+		ans.push_back(to_string(max_vote));
+		return ans;
+	}
 	// ------- PATTERN SEARCHING ALGORITHMS------ //
 	void improver_naive_patt_search(string text, string patt)
 	{
@@ -319,5 +344,9 @@ int main()
 	// obj.fill_LPS_array(s1,lps);
 	// for(int i=0;i<s1.length();i++)
 	// 	cout<<lps[i]<<"\t";
-	obj.check_for_rotation("bcaacd","acdbca");
+	// obj.check_for_rotation("bcaacd","acdbca");
+	int n = 13;
+	string votes[] = {"john","johnny","jackie","johnny","john","jackie","jamie","jamie","john","johnny","jamie","johnny","john"};
+	vector<string> ans=obj.winner(votes,n);
+	cout<<"Winner\n"<<ans[0]<<"\t"<<ans[1];
 }
