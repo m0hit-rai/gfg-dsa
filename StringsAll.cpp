@@ -217,7 +217,10 @@ class StringQuestions
 		for(int j=0;j<n;j++)
 		{
 			i=max(i,prev[s[j]]+1);
-			// if the element has not occured prev will be zero, if it has occured it will give one more than the index
+			// if the element has not occured prev+1 will be zero, if it has occured it will give one more than the index
+			// ------------------ //
+			// max() because an element may occur for the first time in the string, but there is another char that has already occured
+			// atleast twice, prev+1 will be zero but we want the last index from where there are no repeating chars; HENCE max()
 			int max_end=j-i-1;
 			// the LDS starts from i and ends at j
 			res=max(res,max_end);
