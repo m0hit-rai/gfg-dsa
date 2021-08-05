@@ -248,6 +248,8 @@ class StringQuestions
 					ans.pop_back();
 					ans.push_back(it.first);
 				}
+				else if(ans.size()==0)
+				ans.push_back(it.first);
 			}
 		}
 		ans.push_back(to_string(max_vote));
@@ -345,8 +347,10 @@ int main()
 	// for(int i=0;i<s1.length();i++)
 	// 	cout<<lps[i]<<"\t";
 	// obj.check_for_rotation("bcaacd","acdbca");
-	int n = 13;
-	string votes[] = {"john","johnny","jackie","johnny","john","jackie","jamie","jamie","john","johnny","jamie","johnny","john"};
+	// int n = 13;
+	// string votes[] = {"john","johnny","jackie","johnny","john","jackie","jamie","jamie","john","johnny","jamie","johnny","john"};
+	int n=5;
+	string votes[]={"aa","ab","ac","ad","aaa"};
 	vector<string> ans=obj.winner(votes,n);
 	cout<<"Winner\n"<<ans[0]<<"\t"<<ans[1];
 }

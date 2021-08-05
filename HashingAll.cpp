@@ -191,6 +191,10 @@ class HashingOnline
 			// 	return;
 			// }
 			pref_sum+=a[i];
+			// if adding 10 numbers gives you the same sum as you got by adding the first 4 numbers
+			// then the last 6 numbers add upto zero
+			// Eg: 1+2+3 + 5-10+6+7-4-4 +4 = 10
+			// sum at 3rd element is equal to sum at 9th element hence there is a subarray that has 0 sum
 			if(pref_sum==0 || s.count(pref_sum)==1)
 			{
 				cout<<"Yes\n";
