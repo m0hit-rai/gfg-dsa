@@ -369,7 +369,7 @@ class LinkedListQuestions
 			node *rest_head=rec_reverse_in_size_of_k_ll(nxt,k);
 			head->next=rest_head;
 			/*
-			Q.)}] rev 1->2->3->4->5->6->7, k=3
+			Q.)}] 1->2->3->4->5->6->7, k=3
 			when the first 3 nodes are rev : 3->2->1   6->4->5->7
 			the head is still pointing at 1
 			so we change next of 1 to 6, which is rest of the rev ll's head
@@ -377,6 +377,142 @@ class LinkedListQuestions
 			*/
 		}
 		return prev;
+	}
+	node* reverse_in_size_of_k_ll(node *head, int k)
+	{
+		node *curr=head,*prev_head=NULL;
+		while(curr)
+		{
+			int c=0;
+			node *rest_head=curr,*prev=NULL;
+			while(curr && c<k)
+			{
+				node *nxt= curr->next;
+				curr->next=prev;
+				prev=curr;
+				curr=nxt;
+				c++;
+			}
+			if(!prev_head)
+			{
+				head=prev;
+			}
+			else
+			{
+				prev_head->next=prev;
+			}
+			prev_head=rest_head;
+		}
+		return head;
+	}
+	void loop_detect_ll(node *head)
+	{
+		node *slow,*fast;
+		slow=fast=head;
+		while(fast && fast->next)
+		{
+			slow=slow->next;
+			fast=fast->next->next;
+			if(slow==fast)
+			{
+				cout<<"Loop Detected \n";
+				return;
+			}
+		}
+		cout<<"Loop Not Detected \n";
+	}
+	node *segregate_even_odd_ll(node* head)
+	{
+		// node* last_even,*curr;
+		// curr=last_even=head;
+		// while(curr!=NULL)
+		// {
+		// 	if(curr->data%2 == 0)
+		// 	{
+		// 		int t=curr->data;
+		// 		curr->data=last_even->data;
+		// 		last_even->data=t;
+		// 		last_even=last_even->next;
+		// 	}
+		// 	curr=curr->next;
+		// }
+		// return head;
+		// ---------------
+		// Above algorithm is not stable
+		node *es,*ee,*os,*oe,*curr=head;
+		es=ee=os=oe=NULL;
+		// make two LLs, even & odd
+		// maintain start and end for both
+		// es,ee;os,oe = even start, end; odd start,end.
+		while(curr!=NULL)
+		{
+			if(curr->data%2==0)
+			{
+				if(es)
+				{
+					ee->next=curr;
+					ee=ee->next;
+				}
+				else
+				{
+					es=ee=curr;
+				}
+			}
+			else
+			{
+				if(os)
+				{
+					oe->next=curr;
+					oe=oe->next;
+				}
+				else
+				{
+					os=oe=curr;
+				}
+			}
+			curr=curr->next;
+		}
+		if(!os||!es)
+		return head;
+
+		ee->next=os;
+		oe->next=NULL;
+		return es;
+	}
+	node* merge_sorted_ll(node* h1, node* h2)
+	{
+		node *a=h1,*b=h2;
+		node *head,*tail;
+		if(a->data <= b->data )
+		{
+			head=tail=a;
+			a=a->next;
+		}
+		else
+		{
+			head=tail=b;
+			b=b->next;
+		}
+		while(a && b)
+		{
+			if(a->data <= b->data)
+			{
+				tail->next=a;
+				tail=a;
+				a=a->next;
+			}
+			else
+			{
+				tail->next=b;
+				tail=b;
+				b=b->next;
+			}
+		}
+		if(a)
+			tail->next=a;
+		else
+			tail->next=b;
+		return head;
 	}
 };
 int main()
@@ -429,9 +565,9 @@ int main()
 	// }
 	// obj.print_rev_cdll(head);
 	// obj.print_cdll(head);
-	node* head =NULL;
+	node *head =NULL,*h2=NULL;
 	// cout<<"Enter Elements for list : ";
-	for(int i=0;i<11;i++)
+	for(int i=1;i<50;i+=5)
 	{
 		// int x;
 		// cin>>x;
@@ -440,8 +576,14 @@ int main()
 		// obj.rec_node_print_ll(head);
 		// obj.middle_of_ll(head);
 	}
-	cout<<"ORIGINAL : \n";
+	for(int i=20;i<31;i+=1)
+	{
+		h2=obj.insert_at_end_ll(h2,i);
+	}
+	cout<<"ORIGINAL  1 : \n";
 	obj.rec_node_print_ll(head);
+	cout<<"ORIGINAL  2 : \n";
+	obj.rec_node_print_ll(h2);
 	// obj.middle_of_ll(head);
 	// obj.print_nth_node_from_end_ll(head,8);
 	// head=obj.reverse_ll(head);
@@ -449,7 +591,11 @@ int main()
 	// cout<<"\n\nREVERSED : \n";
 	// obj.rec_node_print_ll(head);
 	// head=obj.remove_duplicates_ll(head);
-	head=obj.rec_reverse_in_size_of_k_ll(head,3);
+	// head=obj.reverse_in_size_of_k_ll(head,2);
+	// head=obj.segregate_even_odd_ll(head);
+	node *h3=obj.merge_sorted_ll(head,h2);
 	cout<<"After Change : \n";
-	obj.rec_node_print_ll(head);
+	obj.rec_node_print_ll(h3);
+	// obj.loop_detect_ll(head);
+	
 }
