@@ -1,6 +1,8 @@
 #include<iostream>
-#include<bits/stdc++.h>
+// #include<bits/stdc++.h>
+// #include<sdhjbcjsavdas>
 #include<cmath>
+#include<vector>
 #include<stack>
 #include<string>
 #define ll long long
