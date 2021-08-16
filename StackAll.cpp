@@ -1,6 +1,5 @@
 #include<iostream>
-// #include<bits/stdc++.h>
-// #include<sdhjbcjsavdas>
+#include<bits/stdc++.h>
 #include<cmath>
 #include<vector>
 #include<stack>
@@ -8,6 +7,115 @@
 #define ll long long
 #define md 1000000007ll
 using namespace std;
+#define sfsq stack_for_stackques
+struct stack_for_stackques
+{
+	vector<int> arr;
+	// vector<int>min_st;
+	int arr_ele,min_st_ele;
+	sfsq()
+	{
+		arr_ele=-1;
+		min_st_ele=-1;
+	}
+	// void push(int x)
+	// {
+	// 	arr.push_back(x);
+	// 	arr_ele++;
+	// 	if(min_st_ele==-1)
+	// 	{
+	// 		min_st.push_back(x);
+	// 		min_st_ele++;
+	// 	}
+	// 	else
+	// 	{
+	// 		if(x<=min_st[min_st_ele])
+	// 		{
+	// 			min_st.push_back(x);
+	// 			min_st_ele++;
+	// 		}
+	// 	}
+
+	// }
+	// int pop()
+	// {
+	// 	if(arr_ele!=-1)
+	// 	{
+	// 		int x=arr[arr_ele];
+	// 		arr.pop_back();
+	// 		arr_ele--;
+	// 		if(x==min_st[min_st_ele])
+	// 		{
+	// 			min_st.pop_back();
+	// 			min_st_ele--;
+	// 		}
+	// 		return x;
+	// 	}
+	// 	else
+	// 	{
+	// 		return -10092;
+	// 	}
+	// }
+	int top()
+	{
+		if(arr_ele!=-1)
+		return arr[arr_ele];
+		else
+		return -10091;
+	}
+	int size()
+	{
+		return ((int)arr.size());
+	}
+	// int get_min()
+	// {
+	// 	if(min_st_ele!=-1)
+	// 	return min_st[min_st_ele];
+	// 	else
+	// 	return -10093;
+	// }
+	// --------------
+	// O(1) space but only for +ve elements
+	void push(int x)
+	{
+		if(arr_ele==-1)
+		{
+			min_st_ele=x;	
+		}
+		else
+		{
+			if(x<min_st_ele)
+			{
+				// store the stack element as difference between current min and new element
+				// curr min = 50, x= 20
+				// 20-50=-30 will be stored in stack
+				x-=min_st_ele;
+				min_st_ele+=x;
+			}
+		}
+		arr.push_back(x);
+		arr_ele++;
+	}
+	int pop()
+	{
+		int x=arr[arr_ele];
+		arr_ele--;
+		arr.pop_back();
+		if(x<0)
+		{
+			// let x=-30, min=20;
+			// => min before x was 20+30=50
+			min_st_ele+=-x;
+			return (min_st_ele+x);
+		}
+		return x;
+	}
+	int get_min()
+	{
+		return min_st_ele;
+	}
+
+};
 class StackQuestions
 {
 	public:
@@ -242,6 +350,101 @@ class StackQuestions
 		}
 		cout<<"Maximum area = "<<res<<endl;
 	}
+	void check_get_min_sfsq()
+	{
+		sfsq s;
+		s.push(50);
+		s.push(20);
+		s.push(30);
+		cout<<"s.push(50);\ns.push(20);\ns.push(30);\n";
+		cout<<s.get_min()<<"\n";
+		s.push(5);
+		cout<<"s.push(5);\n";
+		cout<<s.get_min()<<"\n";
+		s.push(4);
+		cout<<"s.push(4);\n";
+		cout<<s.get_min()<<"\n";
+		int x = s.pop();
+		cout<<"s.pop(); = "<<x<<"\n";
+		cout<<s.get_min()<<"\n";
+	}
+	int precedence(char c)
+	{
+		if(c=='^')
+		return 3;
+		if(c=='*' || c=='/')
+		return 2;
+		if(c=='+' || c=='-')
+		return 1;
+
+		return 0;
+	}
+	void convert_infix_to_postfix(string infix)
+	{
+		stack<char> s;
+		string ans;
+		// for(int i=0;i<infix.length();i++)
+		// {
+		// 	if((infix[i]=='+')||(infix[i]=='%')||(infix[i]=='-')||(infix[i]=='*')||(infix[i]=='/'))
+		// 	{
+		// 		op.push(infix[i]);
+		// 	}
+		// 	else if(infix[i]==')')
+		// 	{
+		// 		ans+=op.top();
+		// 		op.pop();
+		// 	}
+		// 	else if('a'<=infix[i] && infix[i]<='z')
+		// 	{
+		// 		ans+=infix[i];
+		// 	}
+		// }
+		// -----------------------------------------------------
+		// This only works for infix wit paranthesis added
+		for(int i=0;i<infix.length();i++)
+		{
+			if('a'<=infix[i] && infix[i]<='z')
+			{
+				ans+=infix[i];
+			}
+			else if(infix[i]=='(')
+			{
+				s.push(infix[i]);
+			}
+			else if(infix[i]==')')
+			{
+				while(s.top()!='(')
+				{
+					ans+=s.top();
+					s.pop();
+				}
+				s.pop();
+			}
+			else
+			{
+				while(!s.empty() && precedence(s.top())>=precedence(infix[i]))
+				{
+					ans+=s.top();
+					s.pop();
+				}
+				s.push(infix[i]);
+			}
+		}
+		while(!s.empty())
+		{
+			ans+=s.top();
+			s.pop();
+		}
+		cout<<"Infix = "<<infix<<"\nPostfix = "<<ans<<"\n";
+	}
+	void evaluate_postfix(string s)
+	{
+		int n=s.length();
+		for(int i=0;i<n;i++)
+		{
+			
+		}
+	}
 };
 int main()
 {
@@ -267,6 +470,9 @@ int main()
 	// obj.max_area_in_a_histogram(a1,sizeof(a1)/sizeof(int));
 	// obj.max_area_in_a_histogram_efficient(a1,sizeof(a1)/sizeof(int));
 	vector<vector<int>> v={{0,1,1,0},{1,1,1,1},{1,1,1,1},{1,0,0,1}};
-	obj.largest_rectangle_with_all_ones(v);
+	// obj.largest_rectangle_with_all_ones(v);
+	// cout<<"\n\n"<<__cplusplus;
+	// obj.check_get_min_sfsq();
+	obj.convert_infix_to_postfix("x+y-a*b/c+e^t*z");
 }
 
