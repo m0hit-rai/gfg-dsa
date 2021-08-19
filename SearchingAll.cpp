@@ -280,11 +280,11 @@ class SearchingAlgos
 			int j=(n+m+1)/2 -i;
 			cout<<"i = "<<i<<"\tj = "<<j<<endl;
 			//i is the start of right side of merged array in terms of a[], similarly j is for b[]
-			int min1=((i==(n-1))?50000:a[i]);
-			int max1=((i==0)?-50000:a[i-1]);
+			int min1=((i==(n-1))?INT_MAX:a[i]);
+			int max1=((i==0)?INT_MIN:a[i-1]);
 			cout<<max1<<"\t"<<min1<<endl;
-			int min2=((j==(m-1))?50000:b[j]);
-			int max2=((j==0)?-50000:b[j-1]);
+			int min2=((j==(m-1))?INT_MAX:b[j]);
+			int max2=((j==0)?INT_MIN:b[j-1]);
 			cout<<max2<<"\t"<<min2<<endl;
 			if(max1<=min2 && max2<=min1)//checks if we have reached the mid point
 			{
