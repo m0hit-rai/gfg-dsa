@@ -379,7 +379,7 @@ class StackQuestions
 
 		return 0;
 	}
-	void convert_infix_to_postfix(string infix)
+	string convert_infix_to_postfix(string infix)
 	{
 		stack<char> s;
 		string ans;
@@ -403,7 +403,7 @@ class StackQuestions
 		// This only works for infix wit paranthesis added
 		for(int i=0;i<infix.length();i++)
 		{
-			if('a'<=infix[i] && infix[i]<='z')
+			if(('a'<=infix[i] && infix[i]<='z') || ('0'<=infix[i] && infix[i]<='9'))
 			{
 				ans+=infix[i];
 			}
@@ -435,15 +435,87 @@ class StackQuestions
 			ans+=s.top();
 			s.pop();
 		}
-		cout<<"Infix = "<<infix<<"\nPostfix = "<<ans<<"\n";
+		return ans;
+		// cout<<"Infix = "<<infix<<"\nPostfix = "<<ans<<"\n";
+	}
+	inline bool isOperator(char c)
+	{
+		return (c=='+' || c=='*' || c=='-' || c=='^' || c=='/');
 	}
 	void evaluate_postfix(string s)
 	{
 		int n=s.length();
-		for(int i=0;i<n;i++)
+		stack<int> st;
+		for(int i=0;i<s.length();i++)
 		{
-			
+			if(isOperator(s[i]))
+			{
+				int a=st.top();
+				st.pop();
+				int b=st.top();
+				st.pop();
+				int x;
+				if(s[i]=='+')
+					x=b+a;
+				else if(s[i]=='-')
+					x=b-a;
+				else if(s[i]=='*')
+					x=b*a;
+				else if(s[i]=='/')
+					x=b/a;
+				else
+					x=pow(b,a);
+				st.push(x);
+				cout<<"i = "<<i<<"\ta = "<<a<<"\tb = "<<b<<"\tx = "<<x<<"\n";
+			}
+			else
+			{
+				st.push((s[i]-'0'));
+			}
 		}
+		// cout<<s<<endl;
+		cout<<st.top()<<endl;
+	}
+	void convert_infix_to_prefix(string s)
+	{
+		stack<char> st;
+		string ans="";
+		for(int i=s.length()-1;i>=0;i--)
+		{
+			if(('a'<=s[i] && s[i]<='z') || ('A'<=s[i] && s[i]<='Z'))
+			{
+				ans=ans+s[i];
+			}
+			else if(s[i]==')')
+			{
+				st.push(s[i]);
+			}
+			else if(isOperator(s[i]))
+			{
+				while(!st.empty() && precedence(s[i])<precedence(st.top()))
+				{
+					ans=ans+st.top();
+					st.pop();
+				}
+				st.push(s[i]);
+			}
+			else if(s[i]=='(')
+			{
+				while(!st.empty() && st.top()!=')')
+				{
+					ans=ans+st.top();
+					st.pop();
+				}
+				st.pop();
+			}
+		}
+		while(!st.empty())
+		{
+			ans=ans+st.top();
+			st.pop();
+		}
+		reverse(ans.begin(),ans.end());
+		cout<<"Infix = "<<s<<"\nPrefix = "<<ans;
 	}
 };
 int main()
@@ -473,6 +545,7 @@ int main()
 	// obj.largest_rectangle_with_all_ones(v);
 	// cout<<"\n\n"<<__cplusplus;
 	// obj.check_get_min_sfsq();
-	obj.convert_infix_to_postfix("x+y-a*b/c+e^t*z");
+	// obj.evaluate_postfix(obj.convert_infix_to_postfix("2^2^2^2^2"));
+	// obj.convert_infix_to_prefix("a*(b+c/e)^(r*(t+s)-x)^t");
+	obj.convert_infix_to_prefix("((x+y)/z-w)*u");
 }
-
