@@ -4,14 +4,14 @@
 #include<queue>
 #include<bits/stdc++.h>
 #include<string>
-#define qfqq queue_for_queue_ques
+#define qfqqua queue_for_queue_ques_using_array
 #define ll linked_list
 using namespace std;
-struct queue_for_queue_ques
+struct queue_for_queue_ques_using_array
 {
 	static const int n=10;
 	int arr[n],front,rear;
-	qfqq()
+	qfqqua()
 	{
 		front=rear=-1;
 	}
@@ -204,10 +204,37 @@ struct stack_using_queue
 class QueueQuestions
 {
 	public:
+	void reverse_queue(queue_ll &q)
+	{
+		if(q.size!=0)
+		{
+			int x=q.f->data;
+			q.dequeue();
+			reverse_queue(q);
+			q.enqueue(x);
+		}
+		// return q;
+	}
+	void generate_numbers(int n, vector<int> v)
+	{
+		queue<string> q;
+		for(auto it : v)
+		q.push(to_string(it));
+		for(int i=0;i<n;i++)
+		{
+			string s=q.front();
+			cout<<s<<"\t";
+			q.pop();
+			// q.push(s+"5");
+			// q.push(s+"6");
+			for(auto it : v)
+			q.push(s + to_string(it));
+		}
+	}
 };
 int main()
 {
-	// qfqq q;
+	// qfqqua q;
 	// for(int i=0; i<11;i++)
 	// {
 	// 	q.enqueue((i+i*3 + 17));
@@ -236,17 +263,33 @@ int main()
 	// 	q.dequeue();
 	// 	cout<<"\nFront = "<<q.get_node_data(q.f)<<"\tRear = "<<q.get_node_data(q.r);
 	// }
-	stack_using_queue st;
-	for (int i = 0; i < 10; i++)
-	{
-		st.push((i^6) * i +13);
-		cout<<"\nTop = "<<st.top();
-	}
-	cout<<"\n\n\n\n";
-	for (int i = 0; i < 5; i++)
-	{
-		// st.push((i^6) * i +13);
-		st.pop();
-		cout<<"\nTop = "<<st.top();
-	}
+	// stack_using_queue st;
+	// for (int i = 0; i < 10; i++)
+	// {
+	// 	st.push((i^6) * i +13);
+	// 	cout<<"\nTop = "<<st.top();
+	// }
+	// cout<<"\n\n\n\n";
+	// for (int i = 0; i < 5; i++)
+	// {
+	// 	// st.push((i^6) * i +13);
+	// 	st.pop();
+	// 	cout<<"\nTop = "<<st.top();
+	// }
+	// queue_ll q;
+	// for(int i=0; i<11;i++)
+	// {
+	// 	q.enqueue((i+i*3 + 17));
+	// 	cout<<"\nFront = "<<q.f->data<<"\tRear = "<<q.r->data;
+	// }
+	QueueQuestions obj;
+	// obj.reverse_queue(q);
+	// cout<<"\n\n\n\n";
+	// for(int i=0; i<6;i++)
+	// {
+	// 	q.dequeue();
+	// 	cout<<"\nFront = "<<q.get_node_data(q.f)<<"\tRear = "<<q.get_node_data(q.r);
+	// }
+	vector<int> v= {0,1,2};
+	obj.generate_numbers(59,v);
 }
