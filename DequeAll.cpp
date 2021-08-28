@@ -146,6 +146,21 @@ class DequeQues
 		}
 		cout<<v[dq.front()]<<"\n\n\n\n";
 	}
+	void circular_tour(petrolPump p[], int n)
+	{
+		int prev_sum=0,curr_sum=0,last_pve=0;
+		for(int i=0;i<n;i++)
+		{
+			curr_sum+=p[i].petrol-p[i].distance;
+			if(curr_sum<0)
+			{
+				prev_sum+=curr_sum;
+				last_pve=i;
+				curr_sum=0;
+			}
+		}
+		cout<<(((prev_sum+curr_sum)>=0)?last_pve:-1);
+	}
 };
 int main()
 {
@@ -173,5 +188,4 @@ int main()
 	// vector<int> v= {10,5,8,1,2,1,1,3,4};
 	// DequeQues obj;
 	// obj.minimum_in_all_subarray_of_size_k(v,3);
-	
 }
