@@ -427,6 +427,78 @@ class TreeQuestions
 		return (count_nodes_in_complete_binary_tree(root->left) + count_nodes_in_complete_binary_tree(root->right) +1);
 
 	}
+	void serialization(tftq *root,vector<int> &v)
+	{
+		queue<tftq *>q;
+		q.push(root);
+		while (!q.empty())
+		{
+			int n=q.size();
+			for(int i=0;i<n;i++)
+			{
+				tftq *temp=q.front();
+				q.pop();
+				if(temp==NULL)
+				{
+					v.push_back(-1);
+				}
+				else
+				{
+					v.push_back(temp->data);
+					// if(temp->left || temp->right)
+					// {
+						q.push(temp->left);
+						q.push(temp->right);
+					// }
+				}
+			}
+		}
+		
+	}
+	tftq *deserialization(vector<int>&v )
+	{
+		if(v[0]==-1)
+		return NULL;
+
+		tftq *root=new tftq(v[0]);
+		queue<tftq *>q;
+		q.push(root);
+		int i=1;
+		while(!q.empty())
+		{
+			int n=q.size();
+			for (int j = 0; j < n; j++)
+			{
+				tftq *temp=q.front();
+				q.pop();
+				if(temp==NULL)
+				continue;
+				if(v[i]==-1)
+				{
+					temp->left=NULL;
+				}
+				else
+				{
+					temp->left=new tftq(v[i]);
+				}
+				i++;
+				if(v[i]==-1)
+				{
+					temp->right=NULL;
+				}
+				else
+				{
+					temp->right=new tftq(v[i]);
+				}
+				q.push(temp->left);
+				q.push(temp->right);
+				i++;
+			}
+			
+		}
+		return root;
+
+	}
 };
 int main()
 {
@@ -484,7 +556,18 @@ int main()
 	// int dist=-1;
 	// obj.burn_binary_tree_from_given_leaf(root,root->left->right->right->left,dist);
 	// cout<<obj.burn_leaf<<"\tGiven node = "<<root->left->right->right->left->data<<"\tdist = "<<dist;
-	int x=0;
+	// int x=0;
 	// cout<<obj.count_nodes_in_binary_tree_noob(root);
-	cout<<obj.count_nodes_in_complete_binary_tree(root);
+	// cout<<obj.count_nodes_in_complete_binary_tree(root);
+	
+	vector<int> v;
+	obj.serialization(root,v);
+	for (size_t i = 0; i < v.size(); i++)
+	{
+		cout<<v[i]<<"\t";
+	}
+	cout<<"\n\n\n";
+
+	tftq *r2d2=obj.deserialization(v);
+	obj.level_order_traversal_line_by_line(r2d2);
 }
