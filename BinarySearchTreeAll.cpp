@@ -185,6 +185,28 @@ class BSTQuestions
 		
 		return prev;
 	}
+	tftq *ceil_in_a_BST(tftq *root, int key)
+	{
+		tftq *prev=NULL;
+		while(root!=NULL)
+		{
+			if(root->data == key)
+			{
+				return root;
+			}
+			else if(root->data>key)
+			{
+				prev = root;
+				root=root->left;
+			}
+			else
+			{
+				root=root->right;
+			}
+		}
+		return prev;
+
+	}
 };
 int main()
 {
@@ -197,10 +219,14 @@ int main()
 	// root = obj.delete_node_bst(root,x);
 	// obj.level_order_traversal_line_by_line(root);
 	// --------------------------------------
-	cout<<"Enter node to calculate floor : ";
+	// cout<<"Enter node to calculate floor : ";
+	// int x;
+	// cin>>x;
+	// cout<<"Answer = "<<obj.floor_in_a_BST(root,x)->data;
+	// --------------------------------------
+	cout<<"Enter node to calculate ceil : ";
 	int x;
 	cin>>x;
-	cout<<"Answer = "<<obj.floor_in_a_BST(root,x)->data;
-
+	cout<<"Answer = "<<obj.ceil_in_a_BST(root,x)->data;
 
 }
