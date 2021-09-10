@@ -228,5 +228,4 @@ int main()
 	int x;
 	cin>>x;
 	cout<<"Answer = "<<obj.ceil_in_a_BST(root,x)->data;
-
 }
