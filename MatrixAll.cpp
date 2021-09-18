@@ -139,6 +139,7 @@ class MatrixAll
 		int m=0,n=0;
 		while(((2*m)<r) && ((2*n)<c))
 		{
+			// top row
 			for(int j=n;j<c-n;j++)
 			{
 				cout<<v[m][j]<<"\t";
@@ -148,8 +149,8 @@ class MatrixAll
 			{
 				cout<<v[i][c-n-1]<<"\t";
 			}
-			// Last row & column
-			if(((c-2*n)>1) && ((r-2*m)>1))
+			// Bottom row & first column
+			if(((c-2*n)>1) || ((r-2*m)>1))
 			{
 				for(int j=c-n-2;j>=n;j--)
 				{
@@ -192,12 +193,12 @@ int main()
 	MatrixAll obj;
 	obj.insert_matrix(4,4);
 	obj.print_matrix("Original Mat : ");
-	// obj.snake_pattern();
+	obj.snake_pattern();
 	// obj.boundry_traversal();
 	// obj=obj.create_transpose();
 	// obj.print_matrix("New Matrix After Transpose  :  \n");
 	// obj.rotate_by_90();
 	// obj.print_matrix("New Matrix After Rotation  :  \n");
 	// obj.spiral_matrix();
-	obj.matrix_search(29);
+	// obj.matrix_search(29);
 }
