@@ -23,6 +23,18 @@ struct binary_heap_min
 	{
 		return ((i-1)/2);
 	}
+	void insert_array_elements(int x)
+	{
+		if((x+size)<=cap)
+		{
+			cout<<"Enter "<<x<<" elements :\n";
+			while(x)
+			{
+				cin>>a[size++];
+				x--;
+			}
+		}
+	}
 	void insert(int x)
 	{
 		if(size==cap)
@@ -87,4 +99,31 @@ struct binary_heap_min
 
 		}
 	}
+	void build_heap_min()
+	{
+		for(int i=(size-2)/2;i>=0;i--)
+		min_heapify(i);
+	}
+	void heap_sort_dec()
+	{
+		int temp=size;
+		build_heap_min();
+		for(int i=size-1;i>=0;i--)
+		{
+			swap(a[0],a[i]);
+			size--;
+			min_heapify(0);
+		}
+		size=temp;
+	}
 };
+int main()
+{
+	bhmn hp(25);
+	hp.insert_array_elements(10);
+	hp.heap_sort_dec();
+	for(int i=0;i<hp.size;i++)
+	{
+		cout<<hp.a[i]<<"\t";
+	}
+}
