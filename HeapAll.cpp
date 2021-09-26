@@ -117,13 +117,24 @@ struct binary_heap_min
 		size=temp;
 	}
 };
+class HeapQuestions{
+	public:
+	void sort_k_sorted_array(int a[],int n,int k)
+	{
+		// an element at index i can be present at any index 
+		// from i-k to i+k in the sorted array
+		
+	}
+
+};
 int main()
 {
-	bhmn hp(25);
-	hp.insert_array_elements(10);
-	hp.heap_sort_dec();
-	for(int i=0;i<hp.size;i++)
-	{
-		cout<<hp.a[i]<<"\t";
-	}
+	// bhmn hp(25);
+	// hp.insert_array_elements(10);
+	// hp.heap_sort_dec();
+	// for(int i=0;i<hp.size;i++)
+	// {
+	// 	cout<<hp.a[i]<<"\t";
+	// }
+	
 }
