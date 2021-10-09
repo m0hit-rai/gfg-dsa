@@ -19,13 +19,19 @@ class GraphQuestions
 		// add_edge_undirected(graph,3,5);
 		// add_edge_undirected(graph,4,5);
 		// ---------------------------
-		add_edge_undirected(graph,0,2);
+		// add_edge_undirected(graph,0,2);
+		// add_edge_undirected(graph,0,1);
+		// add_edge_undirected(graph,1,2);
+		// add_edge_undirected(graph,3,4);
+		// add_edge_undirected(graph,5,6);
+		// add_edge_undirected(graph,5,7);
+		// add_edge_undirected(graph,7,8);
+		// ------------------
 		add_edge_undirected(graph,0,1);
+		add_edge_undirected(graph,0,2);
 		add_edge_undirected(graph,1,2);
-		add_edge_undirected(graph,3,4);
-		add_edge_undirected(graph,5,6);
-		add_edge_undirected(graph,5,7);
-		add_edge_undirected(graph,7,8);
+		add_edge_undirected(graph,1,3);
+		add_edge_undirected(graph,2,3);
 	}
 	void bfs(vector<int>graph[],int i,int vertex,vector<bool>&visited)
 	{
@@ -85,6 +91,33 @@ class GraphQuestions
 			if(!visited[i]) DFS_Rec(graph,visited,i);
 		}
 	}
+	void shortest_path_unweighted_graph(vector<int> graph[], int vertex,int s)
+	{
+		// BFS is always the shortest path
+		vector<int> path(vertex,INT_MAX);
+		vector<bool> visited(vertex,false);
+		queue<int> q;
+		path[s]=0;
+		q.push(s);
+		visited[s]=true;
+		while(!q.empty())
+		{
+			int t=q.front();
+			q.pop();
+			for(auto it:graph[t])
+			{
+				if(!visited[it])
+				{
+					path[it]=path[t]+1;
+					visited[it]=true;
+					q.push(it);
+				}
+			}
+		}
+		for(auto it : path)cout<<it<<"\t";
+		cout<<"\n";
+	}
+	
 };
 int main()
 {
@@ -92,8 +125,9 @@ int main()
 	GraphQuestions obj;
 	obj.create_graph(graph);
 	// obj.bfs(graph,0,6);
-	cout<<"BFS : "<<"\t";
-	obj.BFS_disconnected(graph,9);
-	cout<<"\nDFS : "<<"\t";
-	obj.DFS(graph,9);
+	// cout<<"BFS : "<<"\t";
+	// obj.BFS_disconnected(graph,9);
+	// cout<<"\nDFS : "<<"\t";
+	// obj.DFS(graph,9);
+	obj.shortest_path_unweighted_graph(graph,4,0);
 }
