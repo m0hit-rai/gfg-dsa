@@ -117,7 +117,38 @@ class GraphQuestions
 		for(auto it : path)cout<<it<<"\t";
 		cout<<"\n";
 	}
-	
+	bool detect_cycle_DFS_rec(vector<int> graph[],int node,vector<bool>&visited,int parent)
+	{
+		visited[node]=true;
+		for(int i=0;i<graph[node].size();i++)
+		{
+			if(visited[graph[node][i]]==false)
+			{
+				if(detect_cycle_DFS_rec(graph,graph[node][i],visited,node)==true)
+					return true;
+			}
+			else if(graph[node][i]!=parent)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	bool detect_cycle_DFS(vector<int> graph[],int vertex)
+	{
+		vector<bool> visited(vertex,false);
+		for(int i=0;i<vertex;i++)
+		{
+			if(!visited[i])
+			{
+				if(detect_cycle_DFS_rec(graph,i,visited,-1))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 };
 int main()
 {
