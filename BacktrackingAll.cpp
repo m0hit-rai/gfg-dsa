@@ -127,14 +127,14 @@ class BacktrackingQuestions
 		// }
 		return false;
 	}
-	bool isSafe_sudoku(int r, int c, vector<vector<int>>&puzzle, int nxt)
+	bool isSafe_sudoku(int r, int c, vector<vector<int>>&puzzle, int num)
 	{
-		// nxt is to be filled at (r,c) int th matrix puzzle
+		// num is to be filled at (r,c) in the matrix:puzzle
 		int n=puzzle.size();
 		for(int i=0;i<n;i++)
 		{
-			// che
-			if(puzzle[r][i]==nxt ||puzzle[i][c]==nxt )
+			// checking rows and columns 
+			if(puzzle[r][i]==num ||puzzle[i][c]==num )
 			{
 				return false;
 			}
@@ -145,9 +145,10 @@ class BacktrackingQuestions
 		int grid_row=(r/nrt)*nrt,grid_col=(c/nrt)*nrt;
 		for(int i=0;i<nrt;i++)
 		{
+			// checking in the grid if num exists
 			for(int j=0;j<nrt;j++)
 			{
-				if(puzzle[grid_row+i][grid_col+j]==nxt)
+				if(puzzle[grid_row+i][grid_col+j]==num)
 				{
 					return false;
 				}
@@ -174,7 +175,7 @@ class BacktrackingQuestions
 			break;
 		}
 		// if no zero found that means whole matrix is filled
-		// so return zero
+		// so return true ans we've found the solution
 		if(!flag)
 		return true;
 		for(int num=1;num<=n;num++)
