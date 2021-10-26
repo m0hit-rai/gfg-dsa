@@ -93,6 +93,22 @@ class DPQuestions
 
 		return res;
 	}
+	int matrix_chain_rec(vector<int> &arr, int i,int j)
+	{
+		if((i+1)==j)
+		return 0;
+
+		int res=INT_MAX;
+		for(int k=i+1;k<j;k++)
+		{
+			// multiplying matrix between i,k the final matrix will have dimensions as (arr[i],arr[k])
+			res=min(res,matrix_chain_rec(arr,i,k)+
+				matrix_chain_rec(arr,k,j)+arr[i]*arr[k]*arr[j]);
+			// when we have just two matrix, we can multiply their three different dimensions to know 
+			// how many multiplications will be done in multiplying those two
+		}
+		return res;
+	}
 };
 int main()
 {
@@ -102,6 +118,10 @@ int main()
 	// cout<<"Ans = "<<obj.lcs(memo_lcs,s1,s2,s1.length(),s2.length());
 	// cout<<"LCS of \""<<s1<<"\" and \""<<s2<<"\" is of length = "<<obj.lcs_tabulation(s1,s2);
 	// obj.lcs_tabulation(s1,s2);
-	vector<int> coins={5,2,3,6};
-	cout<<"ans = "<<obj.num_of_coins(coins,10,coins.size());
+	// vector<int> coins={5,2,3,6};
+	// cout<<"ans = "<<obj.num_of_coins(coins,10,coins.size());
+
+
+	vector<int>m={2,3,4,5,6};
+	cout<<obj.matrix_chain_rec(m,0,4);
 }
