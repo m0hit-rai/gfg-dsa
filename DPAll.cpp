@@ -109,6 +109,41 @@ class DPQuestions
 		}
 		return res;
 	}
+	int matrix_chain_dp(vector<int> &arr)
+	{
+		int n=arr.size();
+		vector<vector<int>> dp(n,vector<int>(n));
+
+		for(int i=0;i<n-1;i++) 
+		{
+			// here gap=1
+			// gap=1 is the base case, when i+1=j
+			dp[i][i+1]=0;
+		}
+
+		for(int gap=2;gap<n;gap++)
+		{
+			for(int i=0;(i+gap)<n;i++)
+			{
+				int j=i+gap;
+				dp[i][j]=INT_MAX;
+				for(int k=i+1;k<j;k++)
+				{
+					cout<<i<<" "<<j<<" "<<k<<" "<<gap<<"\n";
+					dp[i][j]=min(dp[i][j],(dp[i][k]+dp[k][j]+arr[i]*arr[k]*arr[j]));
+				}
+			}
+		}
+		for(auto it:dp)
+		{
+			for(auto itt:it)
+			{
+				cout<<itt<<" ";
+			}
+			cout<<"\n";
+		}
+		return dp[0][n-1];
+	}
 };
 int main()
 {
@@ -122,6 +157,6 @@ int main()
 	// cout<<"ans = "<<obj.num_of_coins(coins,10,coins.size());
 
 
-	vector<int>m={2,3,4,5,6};
-	cout<<obj.matrix_chain_rec(m,0,4);
+	vector<int>m={2,1,3,4};
+	cout<<obj.matrix_chain_rec(m,0,3)<<"\n"<<obj.matrix_chain_dp(m);
 }
