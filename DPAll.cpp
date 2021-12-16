@@ -332,9 +332,11 @@ class DPQuestions
 		}
 		return dp[n-1];
 	}
-	// here we can use one product only once and not more times like coin problem or rope cutting problem
 	int zero_one_knapsack_problem(int w,int wts[],int val[], int n)
 	{
+		// here we can use one product only once
+		// not like coin, rope cutting or min jump
+		// hence we don't use a for loop to iterate over all values in recursion
 		if(n==0 || w==0) return 0;
 
 		if(wts[n-1] > w) 
