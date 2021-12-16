@@ -190,6 +190,9 @@ class DPQuestions
 		// O(nlog(n))
 		int n=v.size();
 		vector<int> tail(n);
+		// tail[len] = stores the maximum possible tail value for LIS of length (len)
+		// at any given index i, the value at tail[len] will be value at which lis[i] ends
+		// example in copy
 		int len=1;
 		tail[0]=v[0];
 		for (int i = 0; i < n; i++)
@@ -202,28 +205,145 @@ class DPQuestions
 			else
 			{
 				int c=ceilIdx(tail,0,len-1,v[i]);
+				// search a value in tail that is just greater than v[i]
 				tail[c]=v[i];
 			}
 		}
 		return len;
 	}
-	int ceilIdx(vector<int> tail,int l,int r, int x)
+	int ceilIdx(vector<int> tail,int st,int end, int x)
 	{
-		while(r>l)
+		while(end>st)
 		{
-			int m=l+(r-l)/2;
-			if(tail[m]>=x)
+			int mid =st+(end-st)/2;
+			if(tail[mid]>=x)
 			{
-				// tail[r] > x so it can be the ceil
-				r=m;
+				// tail[end] > x so it can be the ceil
+				end=mid;
 			}
 			else
 			{
-				// tail[l] < x so it can never be ceil 
-				l=m+1;
+				// tail[st] < x so it can never be ceil 
+				st=mid+1;
 			}
 		}
-		return r;
+		return end;
+	}
+	// variation of LIS
+	// find the max-sum of any increasing subsequence
+	int max_sum_increasing(vector<int> v)
+	{
+		int n=v.size();
+		vector<int> msis(n);
+		// for(int i=0;i<n;i++) msis[i]=v[i];
+		int res=msis[0]=v[0];
+		for(int i=1;i<n;i++)
+		{
+			msis[i]=v[i];
+			for(int j=0;j<i;j++)
+			{
+				if(v[i]>v[j])
+				{
+					msis[i]=max(msis[i],v[i]+msis[j]);
+				}
+			}
+			res=max(res,msis[i]);
+		}
+		return res;
+
+	}
+	int max_length_bitonic_subsequence(vector<int> v)
+	{
+		// O(n^2)
+		// can be optimised similar to the optimisation of original LIS
+		int n=v.size();
+		vector<int> lis(n,1),lds(n,1);
+		// lis
+		for(int i=1;i<n;i++)
+		{
+			for(int j=0;j<i;j++)
+			{
+				if(v[i]>v[j])
+				{
+					lis[i]=max(lis[i],1+lis[j]);
+				}
+			}
+		}
+		// lds=lis from right
+		for(int i=n-2;i>=0;i--)
+		{
+			for(int j=n-1;j>i;j--)
+			{
+				if(v[i]>v[j])
+				{
+					lds[i]=max(lds[i],1+lds[j]);
+				}
+			}
+		}
+		int res=lis[0]+lds[0]-1;
+		for(int i=1;i<n;i++)
+		{
+			res=max(res,(lis[i]+lds[i]-1));
+		}
+		return res;
+	}
+	int min_coins(int val,int a,int b, int c)
+	{
+		// Recursion
+		// if(val==0)return 0;
+		// if(val<0) return INT_MAX;
+
+		// int res=min(min_coins(val-a,a,b,c),
+		// 		min(min_coins(val-b,a,b,c),min_coins(val-c,a,b,c)));
+		// // if()
+		// if(res==INT_MAX) return res;
+		// return (res+1);
+		// -------------------------------------
+		// DP
+		vector<int>dp(val+1,INT_MAX);
+		dp[0]=0;
+		for(int i=1;i<=val;i++)
+		{
+			if((i-a)>=0)dp[i]=min(dp[i],dp[i-a]);
+			if((i-b)>=0)dp[i]=min(dp[i],dp[i-b]);
+			if((i-c)>=0)dp[i]=min(dp[i],dp[i-c]);
+			if(dp[i]!=INT_MAX) dp[i]++;
+		}
+		return dp[val];
+	}
+	int min_jumps(vector<int>& v, int n)
+	{
+		// dp[i] = no. of steps to reach i starting from 0
+		vector<int> dp(n,INT_MAX);
+		dp[0]=0;
+		for(int i=1;i<n;i++)
+		{
+			for(int j=0;j<i;j++)
+			{
+				if((v[j]+j)>=i && dp[j]!=INT_MAX)
+				{
+					// if we can reach i from j and j can be reached too 
+					// then no. of steps to reach i will be one more than
+					// no. of steps to reach j => dp[i]=dp[j]+1
+					// but we need min jumps
+					dp[i]=min(dp[i],dp[j]+1);
+				}
+			}
+		}
+		return dp[n-1];
+	}
+	// here we can use one product only once and not more times like coin problem or rope cutting problem
+	int zero_one_knapsack_problem(int w,int wts[],int val[], int n)
+	{
+		if(n==0 || w==0) return 0;
+
+		if(wts[n-1] > w) 
+		// simply ignoring the wts if it is greater than the weight
+		return zero_one_knapsack_problem(w,wts,val,n-1);
+
+		// max of when considering curr wt and when not considering curr wt.
+		return max(zero_one_knapsack_problem(w,wts,val,n-1),
+				val[n-1] + zero_one_knapsack_problem(w,wts,val,n-1));
 	}
 	int matrix_chain_rec(vector<int> &arr, int i,int j)
 	{
@@ -293,8 +413,16 @@ int main()
 	// cout<<"s1 = "<<s1<<" s2 = "<<s2<<"\n";
 	// cout<<"editDistance = "<<obj.edit_distance(s2,s1);
 	
-	vector<int> v={3,4,2,8,10,5,1};
-	cout<<"LIS = "<<obj.longest_increasing_subsequence_optimised(v);
+	// vector<int> v={3,4,2,8,10,5,1};
+	// cout<<"LIS = "<<obj.longest_increasing_subsequence_optimised(v);
+
+	// vector<int> v={1,11,2,10,4,5,2,1};
+	// cout<<"MLBS = "<<obj.max_length_bitonic_subsequence(v);
+
+	// cout<<"coins = "<<obj.min_coins(29,11,4,7);
+
+	vector<int> v={3,2,1,1,1,4,5,1};
+	cout<<"Jumps = "<<obj.min_jumps(v,v.size());
 
 	// vector<int>m={2 ,2 ,4 ,2 ,6};
 	// cout<<obj.matrix_chain_rec(m,0,4)<<"\n"<<obj.matrix_chain_dp(m);
