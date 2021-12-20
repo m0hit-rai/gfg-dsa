@@ -81,19 +81,19 @@ class DPQuestions
 		cout<<"LCS of \""<<s1<<"\" and \""<<s2<<"\" is "<<ans;
 		return dp[m][n];
 	}
-	int num_of_ways(vector<int> &coins,int sum, int n)
+	int coin_change(vector<int> &coins,int sum, int n)
 	{
 		// cout<<"sum = "<<sum<<"\t n = "<<n<<"\n";
 		if(sum==0) return 1;
 		if(n==0) return 0;
 
-		int res=num_of_ways(coins,sum,n-1);
+		int res=coin_change(coins,sum,n-1);
 		if(coins[n-1]<=sum)
-		res+=num_of_ways(coins,sum-coins[n-1],n);
+		res+=coin_change(coins,sum-coins[n-1],n);
 
 		return res;
 	}
-	int num_of_ways_dp(vector<int> coins,int sum)
+	int coin_change_dp(vector<int> coins,int sum)
 	{
 		int n=coins.size();
 		vector<vector<int>> dp(sum+1,vector<int>(n+1,0));
@@ -109,7 +109,8 @@ class DPQuestions
 		{
 			for(int j=1;j<=n;j++)
 			{
-				// these lines similar to recursive soln.
+				// these lines are similar to recursive soln.
+
 				// when no. of coins=j then there are atleast same no. of ways to
 				// get the answer as there were when no. of coins was j-1
 				dp[i][j]=dp[i][j-1];
@@ -334,18 +335,62 @@ class DPQuestions
 	}
 	int zero_one_knapsack_problem(int w,int wts[],int val[], int n)
 	{
-		// here we can use one product only once
-		// not like coin, rope cutting or min jump
-		// hence we don't use a for loop to iterate over all values in recursion
-		if(n==0 || w==0) return 0;
+		// // here we can use one product only once
+		// // not like coin, rope cutting or min jump
+		// // hence we don't use a for loop to iterate over all values in recursion
+		// if(n==0 || w==0) return 0;
 
-		if(wts[n-1] > w) 
-		// simply ignoring the wts if it is greater than the weight
-		return zero_one_knapsack_problem(w,wts,val,n-1);
+		// if(wts[n-1] > w) 
+		// // simply ignoring the wts if it is greater than the weight
+		// return zero_one_knapsack_problem(w,wts,val,n-1);
 
-		// max of when considering curr wt and when not considering curr wt.
-		return max(zero_one_knapsack_problem(w,wts,val,n-1),
-				val[n-1] + zero_one_knapsack_problem(w,wts,val,n-1));
+		// // max of when considering curr wt and when not considering curr wt.
+		// return max(zero_one_knapsack_problem(w,wts,val,n-1),
+		// 		val[n-1] + zero_one_knapsack_problem(w,wts,val,n-1));
+		// ---------------------------------------
+		vector<vector<int>>dp(w+1,vector<int>(n+1,0));
+		// base case handled
+		for(int i=1;i<=w;i++)
+		{
+			for(int j=1;j<=n;j++)
+			{
+				// totally similar to Recursion
+				if(wts[j-1]>i)
+				{
+					dp[i][j]=dp[i][j-1];
+				}
+				else
+				{
+					dp[i][j]=max(dp[i][j-1],(val[j-1]+dp[i-wts[j-1]][j-1]));
+				}
+			}
+		}
+		return dp[w][n];
+	}
+	int optimal_strategy(vector<int> v)
+	{
+		int n=v.size();
+		vector<vector<int>> dp(n , vector<int>(n));
+		// as two dimensions of dp are i&j and the final answer we get is when i=0 & j=n-1 so
+		// our answer will be at top right corner, matrix is filled in bottom up manner
+		// everytime we need elements of a diagonal below to fill current element
+		// suppose i=0,j=6 then we call for (2,6),(1,5)&(0,4) acc. to recursion
+		
+		// and our base case is when j=i+1 i.e. when there are only two elements in the array
+		for(int i=0;i<n-1;i++)
+		dp[i][i+1]=max(v[i],v[i+1]);
+
+		for(int gap=3;gap<n;gap+=2)
+		{
+			for(int i=0;i+gap<n;i++)
+			{
+				int j=i+gap;
+				// we select one and give the best of remaining to opponent
+				dp[i][j]=max((v[i] + min(dp[i+1][j-1],dp[i+2][j])),
+						(v[j] + min(dp[i+1][j-1],dp[i][j-2])));
+			}
+		}
+		return dp[0][n-1];
 	}
 	int matrix_chain_rec(vector<int> &arr, int i,int j)
 	{
@@ -409,8 +454,8 @@ int main()
 	// obj.lcs_tabulation(s1,s2);
 	
 	// vector<int> coins={5,2,3,6};
-	// cout<<"ans = "<<obj.num_of_ways(coins,10,coins.size());
-	// cout<<"\ndp ans = "<<obj.num_of_ways_dp(coins,10);
+	// cout<<"ans = "<<obj.coin_change(coins,10,coins.size());
+	// cout<<"\ndp ans = "<<obj.coin_change_dp(coins,10);
 	
 	// cout<<"s1 = "<<s1<<" s2 = "<<s2<<"\n";
 	// cout<<"editDistance = "<<obj.edit_distance(s2,s1);
