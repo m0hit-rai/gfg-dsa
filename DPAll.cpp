@@ -392,6 +392,122 @@ class DPQuestions
 		}
 		return dp[0][n-1];
 	}
+	int egg_dropping_puzzle(int floor,int egg)
+	{
+		vector<vector<int>> dp(floor+1,vector<int>(egg+1,0));
+		// eggs!=0
+		for (int i = 1; i <=egg; i++)
+		{
+			dp[1][i]=1;
+			dp[0][i]=0;
+		}
+		for (int i = 0; i<=floor; i++)
+		{
+			dp[i][1]=i;
+		}
+		for(int i=2;i<=floor;i++)
+		{
+			for(int j=2;j<=egg;j++)
+			{
+				// int res=INT_MAX;
+				dp[i][j]=INT_MAX;
+				for(int x=1;x<=i;x++)
+				{
+					dp[i][j]=min(dp[i][j],1+max(dp[x-1][j-1],dp[i-x][j]));
+				}
+				// dp[i][j]=res+1;
+			}
+		}
+		for(auto it : dp)
+		{
+			for(auto i : it)
+			{
+				cout<<i<<"\t";
+			}
+			cout<<"\n";
+		}
+		return dp[floor][egg];
+	}
+	int count_BTSs(int n)
+	{
+		vector<int> dp(n+1,0);
+		// when no nodes there is one BST that can be made
+		dp[0]=1;
+		for(int i=1;i<=n;i++)
+		{
+			for(int j=0;j<i;j++)
+			{
+				dp[i]+=dp[j]*dp[i-j-1];
+			}
+		}
+		return dp[n];
+	}
+	int max_sum_with_no_consecutives(vector<int> &v,int n)
+	{
+		// vector<int> dp(n+1,0);
+		// dp[1]=v[0];
+		// dp[2]=v[1];
+		// for (int i = 3; i <= n; i++)
+		// {
+		// 	dp[i]=max(dp[i-1],dp[i-2]+v[i-1]);
+		// }
+		// return dp[n];
+		// --------------------------
+		// Optimised Soln.
+		if(n==1) return v[0];
+		int prev_prev=v[0];
+		int prev=max(v[0],v[1]);
+		int res=prev;
+		for(int i=3;i<=n;i++)
+		{
+			res=max(prev,prev_prev+v[i-1]);
+			prev_prev=prev;
+			prev=res;
+		}
+		return res;
+	}
+	int subset_sum_problem(vector<int>&v, int n, int sum)
+	{
+		// if(sum==0)
+		// {
+		// 	// for(auto it : subset)
+		// 	// cout<<it<<" ";
+		// 	// cout<<"\n";
+		// 	return 1;
+		// } 
+		// if(n==0) return 0;
+
+		// if(sum>=v[n-1])
+		// {
+		// 	// int x=subset_sum_problem(v,n-1,sum,subset);
+		// 	// subset.push_back(v[n-1]);
+		// 	// x+=subset_sum_problem(v,n-1,sum-v[n-1],subset);
+		// 	// return x;
+		// 	return (subset_sum_problem(v,n-1,sum)+subset_sum_problem(v,n-1,sum-v[n-1]));
+		// }
+		// return subset_sum_problem(v,n-1,sum,subset);
+
+		vector<vector<int>> dp(n+1,vector<int>(sum+1,0));
+		for(int i=0;i<=n;i++)
+		{
+			dp[i][0]=1;
+		}
+
+		for(int i=1;i<=n;i++)
+		{
+			for(int j=1;j<=sum;j++)
+			{
+				// cout<<i<<" "<<j<<"\n";
+				// dp[i][j]=0;
+
+				if(j>=v[i-1])
+				dp[i][j]=dp[i-1][j-v[i-1]] + dp[i-1][j];
+				else
+				dp[i][j]=dp[i-1][j];
+			}
+		}
+		return dp[n][sum];
+	}
 	int matrix_chain_rec(vector<int> &arr, int i,int j)
 	{
 		if((i+1)==j)
@@ -468,9 +584,17 @@ int main()
 
 	// cout<<"coins = "<<obj.min_coins(29,11,4,7);
 
-	vector<int> v={3,2,1,1,1,4,5,1};
-	cout<<"Jumps = "<<obj.min_jumps(v,v.size());
+	// vector<int> v={3,2,1,1,1,4,5,1};
+	// cout<<"Jumps = "<<obj.min_jumps(v,v.size());
 
+	// cout<<"Egg Dropping (f=10,e=2) = "<<obj.egg_dropping_puzzle(10,2);
+
+	// vector<int> v={10,20,30,40,5,60,70};
+	// cout<<obj.max_sum_with_no_consecutives(v,v.size());
+
+	vector<int> v={10,20,15,30,25,40,35};
+	vector<int> x;
+	cout<<obj.subset_sum_problem(v,v.size(),70);
 	// vector<int>m={2 ,2 ,4 ,2 ,6};
 	// cout<<obj.matrix_chain_rec(m,0,4)<<"\n"<<obj.matrix_chain_dp(m);
 }
