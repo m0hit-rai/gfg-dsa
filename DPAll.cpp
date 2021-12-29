@@ -544,20 +544,117 @@ class DPQuestions
 				dp[i][j]=INT_MAX;
 				for(int k=i+1;k<j;k++)
 				{
-					cout<<i<<" "<<j<<" "<<k<<" "<<gap<<"\n";
+					// cout<<i<<" "<<j<<" "<<k<<" "<<gap<<"\n";
 					dp[i][j]=min(dp[i][j],(dp[i][k]+dp[k][j]+arr[i]*arr[k]*arr[j]));
 				}
 			}
 		}
-		for(auto it:dp)
+		// for(auto it:dp)
+		// {
+		// 	for(auto itt:it)
+		// 	{
+		// 		cout<<itt<<" ";
+		// 	}
+		// 	cout<<"\n";
+		// }
+		return dp[0][n-1];
+	}
+	bool is_pall(string &s, int i, int j)
+	{
+		while(i<j)
 		{
-			for(auto itt:it)
+			if(s[i]!=s[j])
+			return false;
+
+			i++;
+			j--;
+		}
+		return true;
+	}
+	int pallindrome_partitioning_rec(string &s, int i,int j)
+	{
+		if(i==j || is_pall(s,i,j))return 0;
+		int res=INT_MAX;
+		for(int k=i;k<j;k++)
+		{
+			res=min(res,( pallindrome_partitioning_rec(s,i,k)
+					  +pallindrome_partitioning_rec(s,k+1,j)+1));
+		}
+		return res;
+	}
+	int pallindrome_partitioning_dp(string &s)
+	{
+		int n=s.size();
+		vector<vector<int>> dp(n,vector<int>(n,INT_MAX));
+
+		// primary diagonal i.e. where i=j is zero
+		for(int i=0;i<n;i++)
+		dp[i][i]=0;
+
+		for(int gap=1;gap<n;gap++)
+		{
+			for(int i=0;(i+gap)<n;i++)
 			{
-				cout<<itt<<" ";
+				int j=i+gap;
+				if(is_pall(s,i,j)) dp[i][j]=0;
+				else
+				{
+					for(int k=i;k<j;k++)
+					{
+						dp[i][j]=min(dp[i][j],(1+dp[i][k]+dp[k+1][j]));
+					}
+				}
 			}
-			cout<<"\n";
 		}
 		return dp[0][n-1];
+	}
+	int arrSum(vector<int> &v, int st,int end )
+	{
+		int sum=v[st++];
+		while(st<=end)
+		{
+			sum+=v[st++];
+		}
+		return sum;
+	}
+	int allocate_minimum_pages_rec(vector<int> &v,int n, int k)
+	{
+		if(n==1) return v[0];
+		if(k==1) return arrSum(v,0,n-1);
+		int res=INT_MAX;
+		for(int i=1;i<n;i++)
+		{
+			res=min(res,max(allocate_minimum_pages_rec(v,i,k-1),arrSum(v,i,n-1)));
+		}
+		return res;
+	}
+	int allocate_minimum_pages_dp(vector<int> &v,int k)
+	{
+		int n=v.size();
+		vector<vector<int>> dp(k+1,vector<int>(n+1,0));
+		for (int i = 1; i < k+1; i++)
+		{
+			dp[i][1]=v[0];
+			// base case 1
+		}
+		for (int i = 1; i < n+1; i++)
+		{
+			dp[1][i]=arrSum(v,0,i-1);
+			// base case 2
+		}
+		for(int i=2;i<=k;i++)
+		{
+			for(int j=2;j<=n;j++)
+			{
+				dp[i][j]=INT_MAX;
+				for(int partition=1; partition<n ; partition++)
+				{
+					dp[i][j]=min(dp[i][j],max(dp[i-1][partition],arrSum(v,partition,j-1)));
+				}
+			}
+		}
+
+		return dp[k][n];
 	}
 };
 int main()
@@ -592,9 +689,18 @@ int main()
 	// vector<int> v={10,20,30,40,5,60,70};
 	// cout<<obj.max_sum_with_no_consecutives(v,v.size());
 
-	vector<int> v={10,20,15,30,25,40,35};
-	vector<int> x;
-	cout<<obj.subset_sum_problem(v,v.size(),70);
+	// vector<int> v={10,20,15,30,25,40,35};
+	// vector<int> x;
+	// cout<<obj.subset_sum_problem(v,v.size(),70);
+	
 	// vector<int>m={2 ,2 ,4 ,2 ,6};
 	// cout<<obj.matrix_chain_rec(m,0,4)<<"\n"<<obj.matrix_chain_dp(m);
+
+	// string s="aaaabababbababbbabbaabaaababbababbabbabababaaaaaaaaabbbbabababaaaababba";
+	// cout<<"REC. Pallindrome partitioning for "<<s<<" : "<<obj.pallindrome_partitioning_rec(s,0,s.size()-1)<<"\n";
+	// cout<<"DP Pallindrome partitioning for "<<s<<" : "<<obj.pallindrome_partitioning_dp(s)<<"\n";
+
+	vector<int> v={1,2,3,4,5,6,2,3,7,5,6,7,8,9,1,2,3,4};
+	cout<<"REC : "<<obj.allocate_minimum_pages_rec(v,v.size(),10)<<"\n";
+	cout<<"DP : "<<obj.allocate_minimum_pages_dp(v,10)<<"\n";
 }
